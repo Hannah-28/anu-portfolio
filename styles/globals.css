@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+/* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
@@ -24,4 +24,11 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+} */
+
+.menu {
+  @apply text-sm hover:text-primary-dark transition delay-200 ease-in-out duration-500 hover:border-b-primary-dark hover:border-b-2 hover:pb-2 focus:text-primary-dark focus:border-primary-dark
+}
+.menu-block {
+  @apply hover:text-primary-dark transition delay-200 ease-in-out duration-500 border-b border-b-gray-800 pb-2 pt-2 hover:cursor-pointer flex
 }
