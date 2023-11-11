@@ -1,37 +1,132 @@
 import Image from 'next/image';
 import { Inter } from 'next/font/google';
 import Link from 'next/link';
-import { useState, useRef } from 'react';
+import Head from 'next/head';
+import { useState, useRef, useEffect } from 'react';
+import emailjs from '@emailjs/browser';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
   const [show, setShow] = useState(false);
   const [menu, setMenu] = useState('open');
+  const [title, setTitle] = useState('Home');
+  const [isVisible, setIsVisible] = useState(false);
+  const prevScrollPos = useRef(0);
 
   const homeRef = useRef();
   const aboutRef = useRef();
   const technologiesRef = useRef();
   const projectsRef = useRef();
+  const contactRef = useRef();
+  const nameRef = useRef();
+  const emailRef = useRef();
+  const telephoneRef = useRef();
+  const topRef = useRef()
 
   function handleHomeClick() {
+    setTitle('Home');
     homeRef.current.scrollIntoView({ behavior: 'smooth' });
   }
 
   function handleAboutClick() {
+    setTitle('About Me');
     aboutRef.current.scrollIntoView({ behavior: 'smooth' });
   }
 
   function handleTechnologiesClick() {
+    setTitle('Technologies');
     technologiesRef.current.scrollIntoView({ behavior: 'smooth' });
   }
 
   function handleProjectsClick() {
+    setTitle('Projects');
     projectsRef.current.scrollIntoView({ behavior: 'smooth' });
   }
 
+  function handleContactClick() {
+    setTitle('Contact');
+    contactRef.current.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function handleTopClick() {
+    setTitle('Home');
+    topRef.current.scrollIntoView({top: 0, behavior: 'smooth' });
+  }
+
+  useEffect(() => {
+    const toggleVisibility = () => {
+      const currentScrollPos = window.pageYOffset;
+
+      // Button is displayed after scrolling for 50 pixels
+      if (currentScrollPos > 50 && currentScrollPos > prevScrollPos.current) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+
+      prevScrollPos.current = currentScrollPos;
+    };
+
+    window.addEventListener("scroll", toggleVisibility);
+
+    return () => window.removeEventListener("scroll", toggleVisibility);
+  }, [isVisible]);
+
+  function sendEmail(e) {
+    e.preventDefault();
+
+    emailjs
+      .sendForm(
+        'portfolio',
+        'template_tht78dj',
+        e.target,
+        'user_efAXMVQb81YkkbYWM5gEv'
+      )
+      .then(
+        (result) => {
+          toast.success(
+            'Message received!!! I will respond to you via your mail as soon as possible.',
+            {
+              position: 'top-center',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: 'dark',
+            }
+          );
+          e.target.reset();
+        },
+        (error) => {
+          toast.error('There was an error in your form', {
+            position: 'top-center',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'dark',
+          });
+          e.target.reset();
+        }
+      );
+  }
+  
+
   return (
-    <main className={`bg-secondary ${inter.className}`}>
+    <main ref={topRef} className={`bg-secondary ${inter.className}`}>
+      {/* head */}
+      <Head>
+        <title>{title + ' | Olurombi Anuoluwapo'}</title>
+        <meta name="description" content="Portfolio Website" />
+      </Head>
+
       {/* menu bar */}
       <div className="w-full overlay px-4 md:px-10 grid z-50 grid-cols-2 h-auto md:h-16 pt-5 md:pt-0 justify-between items-center bg-secondary text-secondary-light fixed top-0">
         <div className="flex space-x-2 pb-5 font-bold md:pb-0">
@@ -49,7 +144,7 @@ export default function Home() {
           <li onClick={handleProjectsClick} className="menu">
             Projects
           </li>
-          <li onClick={handleHomeClick} className="menu">
+          <li onClick={handleContactClick} className="menu">
             Contact
           </li>
         </ul>
@@ -57,7 +152,7 @@ export default function Home() {
           <Image
             src="/menu.png"
             alt="Open Menu Logo"
-            className="dark:invert pb-5 md:pb-0 flex justify-self-end md:hidden cursor-pointer"
+            className="bg-icon pb-5 md:pb-0 flex justify-self-end md:hidden cursor-pointer"
             width={30}
             height={30}
             priority
@@ -70,7 +165,7 @@ export default function Home() {
           <Image
             src="/close.png"
             alt="Close Menu Logo"
-            className="dark:invert pb-5 md:pb-0 flex justify-self-end md:hidden cursor-pointer"
+            className="bg-icon pb-5 md:pb-0 flex justify-self-end md:hidden cursor-pointer"
             width={20}
             height={20}
             priority
@@ -101,10 +196,11 @@ export default function Home() {
             >
               Projects
             </li>
-            <li className="menu-block border-none">
-              <Link href="/" className="focus:text-primary-dark w-full">
-                Contact
-              </Link>
+            <li
+              onClick={handleContactClick}
+              className="focus:text-primary-dark w-full hover:text-primary-dark transition delay-200 ease-in-out duration-1000 border-b-none border-b-gray-800 pb-2 pt-2 hover:cursor-pointer flex hover:font-extrabold hover:scale-95"
+            >
+              Contact
             </li>
           </ul>
         )}
@@ -126,7 +222,10 @@ export default function Home() {
         </div>
         <h2 className="font-medium">FRONT-END DEVELOPER</h2>
         <div className="flex space-x-3 items-center font-normal text-xs">
-          <div className="border-2 rounded py-2 px-5 bg-primary-dark border-primary-dark hover:bg-transparent transition delay-200 ease-in-out duration-1000 hover:cursor-pointer">
+          <div
+            onClick={handleContactClick}
+            className="border-2 rounded py-2 px-5 bg-primary-dark border-primary-dark hover:bg-transparent transition delay-200 ease-in-out duration-1000 hover:cursor-pointer"
+          >
             HIRE ME
           </div>
           <Link
@@ -147,17 +246,17 @@ export default function Home() {
           <img
             src="/no_1.jpg"
             alt="Profile picture Logo"
-            // className="dark:invert pb-5 md:pb-0 flex justify-self-end md:hidden cursor-pointer"
             className="col-span-6 md:col-span-2 rounded-xl w-auto h-auto border-transparent hover:border-4"
           />
           <div className="col-span-6 md:col-span-4 text-base space-y-5 leading-9 tracking-wide text-gray-200 font-thin">
             <p>
               Hi there 😀, my name is Olurombi Anuoluwapo, and I am constantly
-              evolving. I am a frontend developer with a passion for building
+              evolving. I am a front-end developer with a passion for building
               and optimizing user-friendly websites for users with various
-              business objectives. I am a graduate of University of Lagos with a
-              Bachelor of Science degree in Systems Engineering. Through my
-              journey as a fontend developer, I have gained knowledge in various{' '}
+              business objectives. I am a graduate of the University of Lagos
+              with a Bachelor of Science degree in Systems Engineering. Through
+              my journey as a font-end developer, I have gained knowledge in
+              various{' '}
               <span
                 onClick={handleTechnologiesClick}
                 className="rounded p-1 bg-primary-dark font-thin text-gray-200 hover:border border-transparent hover:cursor-pointer"
@@ -169,7 +268,7 @@ export default function Home() {
 
             <p>
               When I’m not keeping busy with coding, I enjoy listening to music,
-              athletics or watching movies.
+              athletics, or watching movies.
             </p>
             <p>
               If you&apos;re just here to check out some of the{' '}
@@ -181,18 +280,21 @@ export default function Home() {
               </span>{' '}
               I&apos;ve worked on, or you want to view my{' '}
               <Link
-                href="https://drive.google.com/file/d/1k_52vq_7K_4Fo61mXxE2hiyWnAbTUj3T/view?usp=drive_link"
+                href="https://drive.google.com/file/d/1-aMilqRBTIzMY13rfP7o9w0KstdJFLrS/view?usp=sharing"
                 target="_blank"
                 className="rounded p-1 bg-primary-dark hover:border border-transparent"
               >
                 Resumé
               </Link>
-              , or perhaps you have a question, feedback or you simply wanna say
-              hi, you can{' '}
-              <span className="rounded p-1 bg-primary-dark font-thin text-gray-200 hover:border border-transparent hover:cursor-pointer">
-                Get in Touch
+              , or perhaps you have a question or feedback or you simply wanna
+              say hi, you can{' '}
+              <span
+                onClick={handleContactClick}
+                className="rounded p-1 bg-primary-dark font-thin text-gray-200 hover:border border-transparent hover:cursor-pointer"
+              >
+                Get{'\u00A0'}in{'\u00A0'}Touch
               </span>{' '}
-              with me
+              with me.
             </p>
           </div>
         </div>
@@ -207,7 +309,7 @@ export default function Home() {
           TECHNOLOGIES
         </h1>
         <p className="text-base leading-9 tracking-wide text-gray-200 font-thin">
-          I&apos;ve worked with a range of technologies in the 📱 Frontend
+          I&apos;ve worked with a range of technologies in the 📱 front-end
           development world.
         </p>
         <div className="flex flex-wrap">
@@ -217,7 +319,7 @@ export default function Home() {
               width={25}
               height={25}
               alt="html5 logo"
-              className="dark:invert"
+              className="bg-icon"
             />
             <p>HTML5</p>
           </div>
@@ -227,7 +329,7 @@ export default function Home() {
               width={25}
               height={25}
               alt="css3 logo"
-              className="dark:invert"
+              className="bg-icon"
             />
             <p>CSS3</p>
           </div>
@@ -241,7 +343,7 @@ export default function Home() {
               width={25}
               height={25}
               alt="reactjs logo"
-              className="dark:invert"
+              className="bg-icon"
             />
             <p>REACT JS</p>
           </div>
@@ -251,7 +353,7 @@ export default function Home() {
               width={25}
               height={25}
               alt="github logo"
-              className="dark:invert"
+              className="bg-icon"
             />
             <p>GITHUB</p>
           </div>
@@ -261,7 +363,7 @@ export default function Home() {
               width={25}
               height={25}
               alt="nextjs logo"
-              className="dark:invert"
+              className="bg-icon"
             />
             <p>NEXT JS</p>
           </div>
@@ -271,7 +373,7 @@ export default function Home() {
               width={25}
               height={25}
               alt="typescript logo"
-              className="dark:invert"
+              className="bg-icon"
             />
             <p>TYPESCRIPT</p>
           </div>
@@ -281,7 +383,7 @@ export default function Home() {
               width={25}
               height={25}
               alt="redux logo"
-              className="dark:invert"
+              className="bg-icon"
             />
             <p>REDUX</p>
           </div>
@@ -291,7 +393,7 @@ export default function Home() {
               width={25}
               height={25}
               alt="tailwindcss logo"
-              className="dark:invert"
+              className="bg-icon"
             />
             <p>TAILWIND CSS</p>
           </div>
@@ -301,7 +403,7 @@ export default function Home() {
               width={25}
               height={25}
               alt="bootstrap logo"
-              className="dark:invert"
+              className="bg-icon"
             />
             <p>BOOTSTRAP</p>
           </div>
@@ -321,7 +423,7 @@ export default function Home() {
                 ELECTION CHUM
               </h1>
               <p className="leading-9 tracking-wide text-gray-200 font-thin text-xs text-center lg:text-left">
-                An Online Voting System using OTP and face-recognition
+                An Online Voting System using OTP and face recognition.
               </p>
             </div>
             <div>
@@ -335,7 +437,7 @@ export default function Home() {
                     width={25}
                     height={25}
                     alt="github logo"
-                    className="dark:invert icon"
+                    className="bg-icon icon"
                   />
                 </Link>
                 <Link
@@ -347,7 +449,7 @@ export default function Home() {
                     width={30}
                     height={30}
                     alt="arrow logo"
-                    className="dark:invert icon"
+                    className="bg-icon icon"
                   />
                 </Link>
               </div>
@@ -356,6 +458,7 @@ export default function Home() {
                 <li>Nextjs</li>
                 <li>CSS</li>
                 <li>Tailwind css</li>
+                <li>Emailjs</li>
                 <li>REST API</li>
               </ul>
             </div>
@@ -367,7 +470,7 @@ export default function Home() {
                 PORTFOLIO WEBSITE
               </h1>
               <p className="leading-9 tracking-wide text-gray-200 font-thin text-xs text-center lg:text-left">
-                My portfolio website, the site you are currently browsing,
+                My portfolio website, the site you are currently browsing, was
                 designed and coded with ❤️ by me.
               </p>
             </div>
@@ -382,7 +485,7 @@ export default function Home() {
                     width={25}
                     height={25}
                     alt="github logo"
-                    className="dark:invert icon"
+                    className="bg-icon icon"
                   />
                 </Link>
                 <Link
@@ -394,14 +497,16 @@ export default function Home() {
                     width={30}
                     height={30}
                     alt="arrow logo"
-                    className="dark:invert icon"
+                    className="bg-icon icon"
                   />
                 </Link>
               </div>
               <ul className="flex flex-wrap gap-x-3 text-xs leading-9 tracking-wide text-gray-200 font-thin">
                 <li>Nextjs</li>
+                <li>React</li>
                 <li>CSS</li>
                 <li>Tailwind css</li>
+                <li>Emailjs</li>
               </ul>
             </div>
           </div>
@@ -424,7 +529,7 @@ export default function Home() {
                     width={25}
                     height={25}
                     alt="github logo"
-                    className="dark:invert icon"
+                    className="bg-icon icon"
                   />
                 </Link>
                 <Link href="https://retain.dochase.co/" target="_blank">
@@ -433,7 +538,7 @@ export default function Home() {
                     width={30}
                     height={30}
                     alt="arrow logo"
-                    className="dark:invert icon"
+                    className="bg-icon icon"
                   />
                 </Link>
               </div>
@@ -464,7 +569,7 @@ export default function Home() {
                     width={25}
                     height={25}
                     alt="github logo"
-                    className="dark:invert icon"
+                    className="bg-icon icon"
                   />
                 </Link>
                 <Link href="https://koree-kulture.vercel.app/" target="_blank">
@@ -473,7 +578,7 @@ export default function Home() {
                     width={30}
                     height={30}
                     alt="arrow logo"
-                    className="dark:invert icon"
+                    className="bg-icon icon"
                   />
                 </Link>
               </div>
@@ -488,88 +593,190 @@ export default function Home() {
           </div>
         </div>
         <div className="text-center mt-7">
-          <Link href="https://github.com/Hannah-28?tab=repositories" target="_blank" className='border-b border-b-primary pb-3 text-sm hover:text-base transition delay-200 ease-in-out duration-1000'>
+          <Link
+            href="https://github.com/Hannah-28?tab=repositories"
+            target="_blank"
+            className="border-b border-b-primary pb-3 text-sm hover:text-base transition delay-200 ease-in-out duration-1000"
+          >
             View more
           </Link>
         </div>
       </div>
 
-      <div className="w-full overlay px-4 md:px-10 grid z-50 grid-cols-2 h-auto md:h-16 pt-5 md:pt-0 justify-between items-center bg-secondary text-secondary-light bottom-0">
-        <div className="flex space-x-2 pb-5 font-bold md:pb-0">
-          <h1>ANU</h1>
-          <div className="h-2 w-2 rounded-full bg-secondary-light"></div>
-        </div>
-
-        <ul className="hidden md:flex space-x-6 justify-self-end items-center">
-          <li onClick={handleHomeClick} className="menu">
-            Home
-          </li>
-          <li onClick={handleAboutClick} className="menu">
-            About
-          </li>
-          <li onClick={handleProjectsClick} className="menu">
-            Projects
-          </li>
-          <li onClick={handleHomeClick} className="menu">
-            Contact
-          </li>
-        </ul>
-        {menu === 'open' ? (
-          <Image
-            src="/menu.png"
-            alt="Open Menu Logo"
-            className="dark:invert pb-5 md:pb-0 flex justify-self-end md:hidden cursor-pointer"
-            width={30}
-            height={30}
-            priority
-            onClick={() => {
-              setShow(true);
-              setMenu('close');
-            }}
+      {/* contact view */}
+      <div
+        ref={contactRef}
+        className="text-secondary-light px-4 md:px-10 py-20"
+      >
+        <h1 className="text-large font-semibold text-primary pb-6">
+          CONTACT ME
+        </h1>
+        <p className="text-base leading-9 tracking-wide text-gray-200 font-thin">
+          Contact me if you want to hire me, or you have website development
+          gigs, collaborations, give feedback, or just want to say hello 👋.
+        </p>
+        <p className="text-xs text-center">
+          {' '}
+          You can send an{' '}
+          <Link
+            href="mailto:oluronbianu@gmail.com"
+            className="text-primary border-b border-primary hover:text-primary-dark hover:border-primary-dark"
+          >
+            email
+          </Link>{' '}
+          if contact forms aren&apos;t your thing.
+        </p>
+        <form
+          onSubmit={sendEmail}
+          className="space-y-5 w-11/12 md:w-9/12 lg:w-6/12 mx-auto mt-10"
+        >
+          <input
+            type="text"
+            placeholder="Name"
+            className="input"
+            ref={nameRef}
+            name="name"
+            id="name"
+            required
+            autoComplete="off"
+          ></input>
+          <input
+            type="email"
+            placeholder="Email"
+            className="input"
+            ref={emailRef}
+            name="email"
+            id="email"
+            required
+            autoComplete="off"
+          ></input>
+          <input
+            type="tel"
+            placeholder="Phone Number"
+            className="input"
+            ref={telephoneRef}
+            name="phone"
+            id="phone"
+            required
+            autoComplete="off"
+          ></input>
+          <textarea
+            rows={5}
+            placeholder="Message"
+            className="input"
+            name="message"
+            id="message"
+            required
+            autoComplete="off"
           />
-        ) : (
-          <Image
-            src="/close.png"
-            alt="Close Menu Logo"
-            className="dark:invert pb-5 md:pb-0 flex justify-self-end md:hidden cursor-pointer"
-            width={20}
-            height={20}
-            priority
-            onClick={() => {
-              setShow(false);
-              setMenu('open');
-            }}
-          />
-        )}
-
-        {show === true && (
-          <ul className="absolute overlay px-4 md:px-10 text-base mt-16 top-0 left-0 bg-secondary md:hidden w-full col-span-2">
-            <li
-              onClick={handleHomeClick}
-              className="menu-block focus:text-primary-dark w-full"
-            >
-              Home
-            </li>
-            <li
-              onClick={handleAboutClick}
-              className="menu-block focus:text-primary-dark w-full"
-            >
-              About
-            </li>
-            <li
-              onClick={handleProjectsClick}
-              className="menu-block focus:text-primary-dark w-full"
-            >
-              Projects
-            </li>
-            <li className="menu-block border-none">
-              <Link href="/" className="focus:text-primary-dark w-full">
-                Contact
-              </Link>
-            </li>
-          </ul>
-        )}
+          <button className="text-xs border-2 rounded py-2 px-5 bg-transparent border-primary-dark hover:bg-primary-dark transition delay-200 ease-in-out duration-1000">
+            SEND
+          </button>
+        </form>
       </div>
+
+      {/* footer view */}
+      <div className="w-full overlay grid z-50 py-4 h-auto justify-items-center items-center bg-secondary text-secondary-light bottom-0">
+        <div className="flex space-x-6">
+          <Link href="https://github.com/Hannah-28/" target="_blank">
+            <Image
+              src="/github.png"
+              width={25}
+              height={25}
+              alt="github logo"
+              className="bg-icon icon"
+            />
+          </Link>
+          <Link href="mailto:oluronbianu@gmail.com">
+            <Image
+              src="/mail.png"
+              width={25}
+              height={25}
+              alt="mail logo"
+              className="bg-icon icon"
+            />
+          </Link>
+          <Link
+            href="https://api.whatsapp.com/send/?phone=%2B2347055625874&text&type=phone_number&app_absent=0"
+            target="_blank"
+          >
+            <Image
+              src="/whatsapp.png"
+              width={25}
+              height={25}
+              alt="whatsapp logo"
+              className="bg-icon icon"
+            />
+          </Link>
+          <Link
+            href="https://www.linkedin.com/in/anuoluwapo-olurombi-633478173/"
+            target="_blank"
+          >
+            <Image
+              src="/linkedin.png"
+              width={25}
+              height={25}
+              alt="linkedin logo"
+              className="bg-icon icon"
+            />
+          </Link>
+          <Link
+            href="https://instagram.com/anu__oh?igshid=MzNlNGNkZWQ4Mg=="
+            target="_blank"
+          >
+            <Image
+              src="/instagram.png"
+              width={25}
+              height={25}
+              alt="instagram logo"
+              className="bg-icon icon"
+            />
+          </Link>
+          <Link
+            href="https://twitter.com/anu__oh?t=rTiPknuyDKemZdMF6x6_UQ&s=09"
+            target="_blank"
+          >
+            <Image
+              src="/twitter.png"
+              width={25}
+              height={25}
+              alt="twitter logo"
+              className="bg-icon icon"
+            />
+          </Link>
+        </div>
+        <p className="text-xs leading-9 tracking-wide text-gray-200 font-thin">
+          &copy; {new Date().toLocaleDateString('en-us', { year: 'numeric' })}{' '}
+          OLUROMBI ANUOLUWAPO.
+        </p>
+      </div>
+
+      {/* react toast */}
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        limit={1}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
+      {isVisible && (
+      <div 
+      id="back-to-top"
+      className={isVisible ? "back-to-top-visible" : null} onClick={handleTopClick}>
+<Image
+                    src="/up-arrow.png"
+                    width={30}
+                    height={30}
+                    alt="arrow logo"
+                    className="bg-icon"
+                  />
+      </div>)}
     </main>
   );
 }
