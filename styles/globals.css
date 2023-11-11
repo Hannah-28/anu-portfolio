@@ -9,15 +9,68 @@
   @apply hover:text-primary-dark transition delay-200 ease-in-out duration-1000 border-b border-b-gray-800 pb-2 pt-2 hover:cursor-pointer flex hover:font-extrabold hover:scale-95;
 }
 .skill {
-  @apply border border-gray-800 text-xs text-gray-200 font-thin grid justify-items-center items-center mx-auto px-4 py-4 m-4 space-y-4 basis-32 hover:opacity-50 hover:bg-gray-800 hover:scale-105 transition delay-150 ease-in-out duration-700
+  @apply border border-gray-800 text-xs text-gray-200 font-thin grid justify-items-center items-center mx-auto px-4 py-4 m-4 space-y-4 basis-32 hover:opacity-50 hover:bg-gray-800 hover:scale-105 transition delay-150 ease-in-out duration-700;
 }
 .showcase {
-  @apply grid grid-cols-1 lg:grid-cols-2 justify-items-center lg:justify-items-center gap-x-4 px-4 py-10 hover:scale-105 transition delay-200 ease-in-out duration-1000 rounded-lg hover:-translate-y-2
+  @apply grid grid-cols-1 lg:grid-cols-2 justify-items-center lg:justify-items-center gap-x-4 px-4 py-10 hover:scale-105 transition delay-200 ease-in-out duration-1000 rounded-lg hover:-translate-y-2;
 }
-.showcase, .overlay {
+.showcase,
+.overlay {
   box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(7.5px);
 }
 .icon:hover {
+  -webkit-filter: opacity(0.5) drop-shadow(0 0 0 rgb(156 163 175));
   filter: opacity(0.5) drop-shadow(0 0 0 rgb(156 163 175));
+}
+.input {
+  @apply bg-transparent border py-2 px-3 rounded-md border-gray-800 w-full focus:outline-none focus:ring focus:ring-primary-dark text-base leading-9 tracking-wide text-gray-200 font-thin focus:opacity-50 focus:bg-gray-800 transition delay-150 ease-in-out duration-700;
+}
+.bg-icon {
+  -webkit-filter: invert(100%); /* Safari/Chrome */
+  filter: invert(100%);
+}
+/* .anchor {
+  position: fixed;
+  bottom: 0;
+  background-color: #fff;
+  border: 1px solid #000;
+  padding: 1em 0.5em;
+  text-decoration: none;
+  color: #000;
+  font-size: 0.9em;
+}
+
+.anchor:hover {
+  background-color: #000;
+  color: #fff;
+  border: 1px solid #fff;
+  transition: ease 1s all;
+  cursor: pointer;
+} */
+#back-to-top {
+  background: black;
+  background-repeat: no-repeat;
+  padding: 0.3em;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  outline: none;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 99;
+  font-size: 2.5rem;
+  transform: scale(0);
+  transition: all 0.5s ease-in-out;
+}
+
+#back-to-top:hover {
+  -webkit-filter: opacity(0.5) drop-shadow(0 0 0 rgb(156 163 175));
+  filter: opacity(0.5) drop-shadow(0 0 0 rgb(255, 0, 140));
+  
+}
+
+#back-to-top.back-to-top-visible {
+  transform: scale(1);
 }
