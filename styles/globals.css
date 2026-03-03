@@ -9,7 +9,7 @@
   @apply hover:text-primary-dark transition delay-200 ease-in-out duration-1000 border-b border-b-gray-800 pb-2 pt-2 hover:cursor-pointer flex hover:font-extrabold hover:scale-95;
 }
 .skill {
-  @apply border border-gray-800 text-xs text-gray-200 font-thin grid justify-items-center items-center mx-auto px-4 py-4 m-4 space-y-4 basis-32 hover:opacity-50 hover:bg-gray-800 hover:scale-105 transition delay-150 ease-in-out duration-700;
+  @apply border border-gray-800 text-xs text-gray-200 font-thin grid justify-items-center items-center mx-auto px-4 py-10 m-4 space-y-4 basis-32 hover:opacity-50 hover:bg-gray-800 hover:scale-105 transition delay-150 ease-in-out duration-700;
 }
 .showcase {
   @apply grid grid-cols-1 lg:grid-cols-2 justify-items-center lg:justify-items-center gap-x-4 px-4 py-10 hover:scale-105 transition delay-200 ease-in-out duration-1000 rounded-lg hover:-translate-y-2;
