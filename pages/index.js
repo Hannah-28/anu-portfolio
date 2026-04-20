@@ -276,7 +276,8 @@ export default function Home() {
               >
                 Projects
               </span>{' '}
-              I&apos;ve worked on, or you want to view my{' '}
+              I&apos;ve worked on,
+               {/* or you want to view my{' '}
               <Link
                 href="https://drive.google.com/file/d/1WhL08_8JFp80156bxyK0uXK5-pa94dJ0/view?usp=sharing"
                 target="_blank"
@@ -284,7 +285,8 @@ export default function Home() {
               >
                 Resumé
               </Link>
-              , or perhaps you have a question or feedback or you simply wanna
+              ,  */}
+              or perhaps you have a question or feedback or you simply wanna
               say hi, you can{' '}
               <span
                 onClick={handleContactClick}
