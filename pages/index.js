@@ -227,13 +227,13 @@ export default function Home() {
           >
             HIRE ME
           </div>
-          <Link
+          {/* <Link
             href="https://drive.google.com/file/d/1WhL08_8JFp80156bxyK0uXK5-pa94dJ0/view?usp=sharing"
             target="_blank"
             className="border-2 rounded py-2 px-5 bg-transparent border-primary-dark hover:bg-primary-dark transition delay-200 ease-in-out duration-1000"
           >
             GET CV
-          </Link>
+          </Link> */}
         </div>
       </div>
 
